@@ -1,0 +1,461 @@
+<?php
+ session_start();
+ $db = mysqli_connect('localhost', 'root', '', 'db_imd_aviation_inventory') or die('Error connecting to MySQL server.');
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Dashboard | IMD Aviation Inventory</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="assets/bower_components/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="assets/bower_components/Ionicons/css/ionicons.min.css">
+        <!-- jvectormap -->
+        <link rel="stylesheet" href="assets/bower_components/jvectormap/jquery-jvectormap.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+            folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="assets/css/skins/_all-skins.min.css">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <!-- Google Font -->
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+            <header class="main-header">
+                <a href="index.html" class="logo">
+                <span class="logo-mini"><img src="assets/img/imd-logo.png" class="float-left" ></span>
+                <span class="logo-lg"><img src="assets/img/imd-logo.png" class="float-left"></span>
+                </a>
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    </a>
+                    <div class="navbar-custom-menu">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="javascript:void(0);" id="a_logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <!-- Sidebar Menu -->
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="header">MENU</li>
+                        <!-- Optionally, you can add icons to the links -->
+                        <li class="active"><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                        <?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+                        <li><a href="stations.html"><i class="fa fa-plane"></i> <span>Stations</span></a></li>
+                        <?php } ?>
+                        <?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+                        <li><a href="items.html"><i class="fa fa-shopping-cart"></i> <span>Items</span></a></li>
+                        <?php } ?>
+						<?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+                        <li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+                        <?php } ?>
+                        <?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Inward"){ ?>
+                        <li><a href="inwards.html"><i class="fa fa-arrow-circle-down"></i> <span>Inwards</span></a></li>
+                        <?php } ?>
+                        <?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward"){ ?>
+                        <li><a href="outwards.html"><i class="fa fa-arrow-circle-up"></i> <span>Outwards</span></a></li>
+                        <?php } ?>
+						<?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward"){ ?>
+                        <li><a href="status.html"><i class="fa fa-flag"></i> <span>Status</span></a></li>
+                        <?php } ?>
+                        <li class="treeview">
+                            <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>Reports</span>
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Inward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+                                <li><a href="inward-report.html"><i class="fa fa-circle-o"></i> Inwards</a></li>
+                                <?php } ?>
+                                <?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+                                <li><a href="outward-report.html"><i class="fa fa-circle-o"></i> Outwards</a></li>
+                                <?php } ?>
+                                <?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Viewer"){ ?>
+                                <li><a href="stock-report.html"><i class="fa fa-circle-o"></i> Stock</a></li>
+								<?php } ?>
+								<?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+								<li><a href="dispatch-report.html"><i class="fa fa-circle-o"></i> Dispatch</a></li>
+								<?php } ?>
+								<?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+								<li><a href="status-report.html"><i class="fa fa-circle-o"></i> Status</a></li>
+								<?php } ?>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- /.sidebar-menu -->
+                </section>
+                <!-- /.sidebar -->
+            </aside>
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>
+                        Dashboard
+                        <small>Version 1.0</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">Dashboard</li>
+                    </ol>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+					<!-- Small boxes (Stat box) -->
+					<div class="row">
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-aqua">
+								<div class="inner">
+									<h3>
+										<?php
+											$query = "SELECT count(fd_item_id) FROM tb_items";
+											mysqli_query($db, $query) or die('Error querying database.');
+											$result = mysqli_query ($db, $query);
+											$row = mysqli_fetch_array ($result);
+											echo $row[0];
+											$result->close();
+										?>
+									</h3>
+									<p>Items in Inventory</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-bag"></i>
+								</div>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-green">
+								<div class="inner">
+									<h3>
+										<?php
+											$query = "SELECT SUM(fd_quantity) FROM tb_inwards WHERE YEAR(fd_date)=YEAR(CURRENT_DATE())";
+											mysqli_query($db, $query) or die('Error querying database.');
+											$result1 = mysqli_query ($db, $query);
+											$row = mysqli_fetch_array($result1);
+											echo ($row[0]==NULL)?0:$row[0];
+											$result1->close();
+										?>
+									</h3>
+									<p>Inwards this Year</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-yellow">
+								<div class="inner">
+									<h3>
+										<?php
+											$query = "SELECT SUM(fd_quantity) FROM tb_outwards WHERE YEAR(fd_date)=YEAR(CURRENT_DATE())";
+											mysqli_query ($db, $query) or die ('Error querying database.');
+											$result2 = mysqli_query ($db, $query);
+											$row = mysqli_fetch_array($result2);
+											echo ($row[0]==NULL)?0:$row[0];
+											$result2->close();
+										?>
+									</h3>
+									<p>Outwards this Year</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-stats-bars"></i>
+								</div>
+							</div>
+						</div>
+						<!-- ./col -->
+						<div class="col-lg-3 col-xs-6">
+							<!-- small box -->
+							<div class="small-box bg-red">
+								<div class="inner">
+									<h3>
+										<?php
+											$query = "SELECT COUNT(fd_station_id) FROM tb_stations WHERE fd_rmc <> ''";
+											mysqli_query ($db, $query) or die('Error querying database.');
+											$result3 = mysqli_query($db, $query);
+											$row = mysqli_fetch_array($result3);
+											echo $row[0];
+											$result3->close();
+											mysqli_close($db);
+										?>
+									</h3>
+									<p>Total Stations</p>
+								</div>
+								<div class="icon">
+									<i class="ion ion-plane"></i>
+								</div>
+							</div>
+						</div>
+						<!-- ./col -->
+					</div>
+					<!-- /.row -->
+					<div class="row">
+						<div class="col-md-6">
+							<!-- AREA CHART -->
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">Item wise Inwards Chart</h3>
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+									</div>
+								</div>
+								<div class="box-body">
+									<div class="chart">
+										<canvas id="mycanvas1"></canvas>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col (LEFT) -->
+						<div class="col-md-6">
+							<!-- AREA CHART -->
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">Item wise Outwards Chart</h3>
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+									</div>
+								</div>
+								<div class="box-body">
+									<div class="chart">
+										<canvas id="mycanvas3"></canvas>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col (RIGHT) -->
+						<div class="col-md-6">
+							<!-- AREA CHART -->
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">Station wise Inwards Chart</h3>
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+									</div>
+								</div>
+								<div class="box-body">
+									<div class="chart">
+										<canvas id="mycanvas2"></canvas>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col (LEFT) -->
+						<div class="col-md-6">
+							<!-- AREA CHART -->
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">Station wise Outwards Chart</h3>
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+									</div>
+								</div>
+								<div class="box-body">
+									<div class="chart">
+										<canvas id="mycanvas4"></canvas>
+									</div>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col (LEFT) -->
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<!-- MAP & BOX PANE -->
+							<div class="box">
+								<div class="box-header with-border">
+									<h3 class="box-title">Stations</h3>
+									<div class="box-tools pull-right">
+										<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+										</button>
+										<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+									</div>
+								</div>
+								<!-- /.box-header -->
+								<div class="box-body no-padding">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="pad">
+												<!-- Map will be created here -->
+												<div id="world-map-markers" style="height: 325px;"></div>
+											</div>
+										</div>
+										<!-- /.col -->
+									</div>
+									<!-- /.row -->
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+					</div>
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 1.0
+                </div>
+                <!-- Default to the left -->
+				<strong>Copyright &copy; <script>document.writeln (new Date ().getFullYear ());</script> <a href="index.html">IMD, Pune</a>.</strong> All rights reserved.
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+        <!-- jQuery 3 -->
+        <script src="assets/bower_components/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- FastClick -->
+        <script src="assets/bower_components/fastclick/lib/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="assets/js/adminlte.min.js"></script>
+        <!-- jvectormap  -->
+        <script src="assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+		<script src="assets/plugins/jvectormap/jquery-jvectormap-in-mill.js"></script>
+        <!-- SlimScroll -->
+        <script src="assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- ChartJS -->
+		<script src="assets/bower_components/chart.js/Chart.min.js"></script>
+		
+		<script src="assets/js/item-wise-inward-chart.js"></script>
+		<script src="assets/js/station-wise-inward-chart.js"></script>
+		<script src="assets/js/item-wise-outward-chart.js"></script>
+		<script src="assets/js/station-wise-outward-chart.js"></script>
+		<script>
+			$(function () {
+				'use strict';
+				
+				$.ajax ({
+            		type: 'POST',
+            		url: 'assets/php/session-user-id.php',
+            		success: function (result) {
+            			var result_object = JSON.parse (result);
+            			if (result_object.target === 'login.html')
+            				window.location.href = result_object.target;
+            		}
+            	});
+				
+				$('#world-map-markers').vectorMap({
+					map              : 'in_mill',
+					normalizeFunction: 'polynomial',
+					hoverOpacity     : 0.7,
+					hoverColor       : false,
+					backgroundColor  : 'transparent',
+					regionStyle      : {
+					initial      : {
+					fill            : 'rgba(210, 214, 222, 1)',
+					'fill-opacity'  : 1,
+					stroke          : 'none',
+					'stroke-width'  : 0,
+					'stroke-opacity': 1
+					},
+					hover        : {
+					'fill-opacity': 0.7,
+					cursor        : 'pointer'
+					},
+					selected     : {
+					fill: 'yellow'
+					},
+					selectedHover: {}
+					},
+					markerStyle      : {
+					initial: {
+					fill  : '#00a65a',
+					stroke: '#111',
+					r:3
+					}
+					},
+					markers          : [
+					  { latLng: [23.0300, 72.5800], name: 'Ahemdabad'},
+					  { latLng: [12.9667, 77.5667], name: 'Bengaluru (Devanahalli)' },
+					  { latLng: [12.9516, 77.6693], name: 'Bengaluru (HAL)' },
+					  { latLng: [20.2700, 85.8400], name: 'Bhubaneshwar' },
+					  { latLng: [13.0827, 80.2707], name: 'Chennai' },
+					  { latLng: [20.4200, 72.8300], name: 'Diu' },
+					  { latLng: [26.2487, 81.3784], name: 'Fursatganj' },
+					  { latLng: [21.4598, 80.1950], name: 'Gondia' },
+					  { latLng: [17.4447, 78.4664], name: 'Hyderabad (Begumpet)'},
+					  { latLng: [17.2603, 78.3969], name: 'Hyderabad (Shamshabad)' },
+					  { latLng: [9.9700, 76.2800],  name: 'Kochi' },
+					  { latLng: [22.5667, 88.3667], name: 'Kolkata' },
+					  { latLng: [11.2500, 75.7700], name: 'Kozhikode' },
+					  { latLng: [26.8000, 80.9000], name: 'Lucknow' },
+					  { latLng: [30.9100, 75.8500], name: 'Ludhiana' },
+					  { latLng: [12.8700, 74.8800], name: 'Mangalore' },
+					  { latLng: [19.0886, 72.8661], name: 'Mumbai' },
+					  { latLng: [21.0922, 79.0472], name: 'Nagpur' },
+					  { latLng: [19.1819, 77.3186], name: 'Nanded' },
+					  { latLng: [28.5686, 77.1122], name: 'New Delhi (Palam)' },
+					  { latLng: [8.4875, 76.9525], name: 'Thiruvananthapuram' },
+					  { latLng: [25.2800, 82.9600], name: 'Varanasi' },
+					  { latLng: [11.2500, 75.7700], name: 'Calicut' }
+					]
+				});
+				$(document).on ("click", "#a_logout", function (e) {
+					$.ajax ({
+						url: 'assets/php/session-user-id-unset.php',
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							window.location.href = result_object.target;
+						}
+					});
+				});
+			});
+		</script>
+    </body>
+</html>

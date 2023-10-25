@@ -1,0 +1,655 @@
+<?php
+    session_start();
+    if ($_SESSION['session_user_type']==="Inward") {
+        $host = $_SERVER['HTTP_HOST'];
+        $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        $extra = 'dashboard.html';
+        header("Location: http://$host$uri/$extra");
+        exit; 
+    }
+?>
+<!DOCTYPE html>
+<!--
+    This is a starter template page. Use this page to start your new project from
+    scratch. This page gets rid of all links and provides the needed markup only.
+    -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Status Report | IMD Aviation Inventory</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="assets/bower_components/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="assets/bower_components/Ionicons/css/ionicons.min.css">
+		<!-- DataTables -->
+        <link rel="stylesheet" href="assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+		<!-- Select2 -->
+  		<link rel="stylesheet" href="assets/bower_components/select2/dist/css/select2.min.css">
+        <!-- daterange picker -->
+		<link rel="stylesheet" href="assets/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
+        <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+            page. However, you can choose any other skin. Make sure you
+            apply the skin class to the body tag so the changes take effect. -->
+        <link rel="stylesheet" href="assets/css/skins/skin-blue.min.css">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <!-- Google Font -->
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		<style>
+			.select2-container { 
+				width: 100% !important; 
+			}
+			.table.mb-0 {
+				margin-bottom: 0 !important;
+			}
+			.table.mb-8 {
+				margin-bottom: 8px !important;
+			}
+			.table-minimal {
+				margin: 0;
+				width: 100%;
+			}
+			.table-minimal.mb-8 {
+				margin-bottom: 8px;
+			}
+			.table-minimal tbody tr td {
+				padding-bottom: 8px;
+				padding-right: 8px;
+			}			
+			.table-minimal tbody tr td:last-child {
+				padding-right: 0;
+			}			
+			.table-minimal tbody tr:last-child td {
+				padding-bottom: 0;
+			}
+			a.danger {
+				text-decoration: none;
+				color: rgb(215, 57, 37);
+			}
+			a.primary {
+				text-decoration: none;
+				color: rgb(54, 127, 169);
+			}
+			.form-control.w-50 {
+				width: 50px !important;
+			}
+		</style>
+    </head>
+    <!--
+        BODY TAG OPTIONS:
+        =================
+        Apply one or more of the following classes to get the
+        desired effect
+        |---------------------------------------------------------|
+        | SKINS         | skin-blue                               |
+        |               | skin-black                              |
+        |               | skin-purple                             |
+        |               | skin-yellow                             |
+        |               | skin-red                                |
+        |               | skin-green                              |
+        |---------------------------------------------------------|
+        |LAYOUT OPTIONS | fixed                                   |
+        |               | layout-boxed                            |
+        |               | layout-top-nav                          |
+        |               | sidebar-collapse                        |
+        |               | sidebar-mini                            |
+        |---------------------------------------------------------|
+        -->
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+            <!-- Main Header -->
+            <header class="main-header">
+                <a href="index.html" class="logo">
+					<span class="logo-mini"><img src="assets/img/imd-logo.png" class="float-left" ></span>
+					<span class="logo-lg"><img src="assets/img/imd-logo.png" class="float-left"></span>
+                </a>
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    </a>
+					<div class="navbar-custom-menu">
+						<ul class="nav navbar-nav">
+							<li>
+								<a href="javascript:void(0);" id="a_logout">Logout</a>
+							</li>
+						</ul>
+					</div>
+                </nav>
+            </header>
+            <!-- Left side column. contains the logo and sidebar -->
+           
+             <aside class="main-sidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+				<!-- Sidebar Menu -->
+				<ul class="sidebar-menu" data-widget="tree">
+					<li class="header">MENU</li>
+					<!-- Optionally, you can add icons to the links -->
+					<li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+					<?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+					<li><a href="stations.html"><i class="fa fa-plane"></i> <span>Stations</span></a></li>
+					<?php } ?>
+					<?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+					<li><a href="items.html"><i class="fa fa-shopping-cart"></i> <span>Items</span></a></li>
+					<?php } ?>
+					<?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+					<li><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+					<?php } ?>
+					<?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Inward"){ ?>
+					<li><a href="inwards.html"><i class="fa fa-arrow-circle-down"></i> <span>Inwards</span></a></li>
+					<?php } ?>
+					<?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward"){ ?>
+					<li><a href="outwards.html"><i class="fa fa-arrow-circle-up"></i> <span>Outwards</span></a></li>
+					<?php } ?>
+					<?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward"){ ?>
+					<li><a href="status.html"><i class="fa fa-flag"></i> <span>Status</span></a></li>
+					<?php } ?>
+					<li class="treeview active">
+						<a href="#">
+						<i class="fa fa-pie-chart"></i>
+						<span>Reports</span>
+						<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+						</span>
+						</a>
+						<ul class="treeview-menu">
+							<?php
+								if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Inward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+							<li><a href="inward-report.html"><i class="fa fa-circle-o"></i> Inwards</a></li>
+							<?php } ?>
+							<?php
+								if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+							<li><a href="outward-report.html"><i class="fa fa-circle-o"></i> Outwards</a></li>
+							<?php } ?>
+							<?php
+								if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Viewer"){ ?>
+							<li><a href="stock-report.html"><i class="fa fa-circle-o"></i> Stock</a></li>
+							<?php } ?>
+							<?php
+								if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+							<li><a href="dispatch-report.html"><i class="fa fa-circle-o"></i> Dispatch</a></li>
+							<?php } ?>
+							<?php
+								if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+							<li class="active"><a href="status-report.html"><i class="fa fa-circle-o"></i> Status</a></li>
+							<?php } ?>
+						</ul>
+					</li>
+				</ul>
+				<!-- /.sidebar-menu -->
+                </section>
+                <!-- /.sidebar -->
+            </aside><!-- Content Wrapper. Contains page content --> <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Status Report
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                        <li class="active">Report</li>
+                    </ol>
+                </section>
+                <!-- Main content -->
+                <section class="content container-fluid">
+                    <!--------------------------
+                        | Your Page Content Here |
+                        -------------------------->
+                    <div class="box box-primary" id="dv_form">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Form</h3>
+                        </div>
+                        <!-- /.box-header -->
+						<!-- form start -->
+                        <form role="form" id="fm_outward_report" method="post" action="">
+                            <div class="box-body">
+								<div class="col-md-12">
+									<div id="callout_block_form" class="col-md-12"></div>
+									<table class='table table-bordered mb-0'>
+										<thead>
+											<tr>
+												<th>Date (MM/DD/YYYY)</th>
+												<th>Station</th>
+												<th>Item</th>
+												<th>Type</th>
+												<th>Manufacturer</th>
+												<th>Mode of Dispatch</th>
+												<th>Remarks</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="td-group">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</div>
+														<input type="text" class="form-control pull-right" id="datepicker" name="tx_date">
+													</div>
+													<!-- /.input group -->
+												</td>
+												<td class="td-group">
+													<div class="select2-group">
+														<select class="form-control select2" id="s2_station" name="station_id">
+															<option value=""></option>
+														</select>
+													</div>
+												</td>
+												<td class="td-group">
+													<div class="select2-group">
+														<select class="form-control select2" id="s2_item" name="item_id">
+															<option value=""></option>
+														</select>
+													</div>
+												</td>
+												<td class="td-group">
+													<div class="select2-group">
+														<select class="form-control select2" id="s2_item_type"  name="item_type_id">
+															<option value=""></option>
+														</select>
+													</div>
+												</td>
+												<td class="td-group">
+													<div class="select2-group">
+														<select class="form-control select2" id="s2_item_manufacturer" name="item_manufacturer_id">
+															<option value=""></option>
+														</select>
+													</div>
+												</td>
+												<td class="td-group">
+													<div class="select2-group">
+														<select class="form-control select2" id="s2_mode_of_dispatch" name="tx_mode_of_dispatch">
+															<option value=""></option>
+															<option value="By Hand">By Hand</option>
+															<option value="By Speed Post">By Speed Post</option>
+															<option value="By Post">By Post</option>
+														</select>
+													</div>
+												</td>
+												<td class="td-group">
+													<textarea placeholder="Enter Remarks" class="form-control" name="tx_remarks"></textarea>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button id="bt_filter" type="submit" class="btn btn-primary pull-right">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- /.box -->
+					<div class="box" id="dv_datatable">
+                        <div class="box-header">
+                            <h3 class="box-title">List</h3>
+                        </div>
+                        <!-- /.box-header -->
+						<div id="callout_block_datatable" class="col-md-12"></div>
+                        <div class="box-body">
+                            <table id="dt_outwards" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+										<th>Date</th>
+                                        <th>Station</th>
+										<th>Item Dispatched</th>
+										<th>Quantity</th>
+                                        <th>Serial Numbers</th>
+										<th>Status</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>					
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>#</th>
+										<th>Date</th>
+                                        <th>Station</th>
+										<th>Item Dispatched</th>
+										<th>Quantity</th>
+                                        <th>Serial Numbers</th>
+										<th>Status</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+						</div>
+                    </div>
+                    <!-- /.box -->
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+            <!-- Main Footer -->
+            <footer class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 1.0
+                </div>
+                <!-- Default to the left -->
+				<strong>Copyright &copy; <script>document.writeln (new Date ().getFullYear ());</script> <a href="index.html">IMD, Pune</a>.</strong> All rights reserved.
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+        <!-- REQUIRED JS SCRIPTS -->
+        <!-- jQuery 3 -->
+        <script src="assets/bower_components/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!-- Select2 -->
+		<script src="assets/bower_components/select2/dist/js/select2.full.min.js"></script>
+		<!-- DataTables -->
+        <script src="assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+		<!-- date-range-picker -->
+		<script src="assets/bower_components/moment/min/moment.min.js"></script>
+		<script src="assets/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+		<!-- SlimScroll -->
+		<script src="assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		<!-- FastClick -->
+		<script src="assets/bower_components/fastclick/lib/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="assets/js/adminlte.min.js"></script>
+		<!-- jQuery Validate 1.16.0 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
+		<script>
+			$('document').ready (function () {
+            	$.ajax ({
+            		type: 'POST',
+            		url: 'assets/php/session-user-id.php',
+            		success: function (result) {
+            			var result_object = JSON.parse (result);
+            			if (result_object.target === 'login.html')
+            				window.location.href = result_object.target;
+            			
+            		}
+            	});
+				
+                $('#datepicker').daterangepicker({
+					ranges: {
+						'Today'       : [moment(), moment()],
+						'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+						'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+						'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+						'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+						'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+					},
+					startDate: moment().subtract(29, 'days'),
+					endDate  : moment()
+				},
+					function (start, end) {
+						$('#datepicker span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+				});
+				
+				$('#dt_outwards').DataTable ({
+					dom: 'Bfrtip',
+					buttons: [
+						'print'
+					]
+				});
+				read_outwards ();
+				$('#s2_station').select2 ({
+					placeholder: 'Select Station'
+				});
+				read_stations ();
+                $('#s2_item').select2 ({
+					placeholder: 'Select Item'
+				});
+				read_items ();
+				$('#s2_item_type').select2 ({
+					placeholder: 'Select Type'
+				});	
+				
+				$('#s2_item_manufacturer').select2 ({
+					placeholder: 'Select Manufacturer'
+				});
+				$('#s2_mode_of_dispatch').select2 ({
+					placeholder: 'Select'
+				});
+				
+				$('#s2_item').on ('select2:select', function (e) {
+					var data = e.params.data;
+					console.log (data);
+					read_item_details (data.id);					
+				});
+				
+				$('#fm_outward_report').validate ({
+            		highlight: function (element) {
+						$(element).closest('.td-group').addClass('has-error');
+            		},
+            		unhighlight: function (element) {
+            			$(element).closest('.td-group').removeClass('has-error');
+            		},
+            		errorElement: 'span',
+            		errorClass: 'help-block',
+            		errorPlacement: function (error, element) {
+            			if (element.parent('.select2-group').length) {
+            				error.insertAfter(element.parent());
+            			} else if (element.parent('.input-group').length) {
+            				error.insertAfter(element.parent());
+            			} else {
+            				error.insertAfter(element);
+            			}
+            		},
+            		rules: {
+            		},
+            		submitHandler: submit_form
+            	});
+				
+            	function submit_form () {
+					var data = $('#fm_outward_report').serialize ();
+					$.ajax ({
+						type: 'POST',
+						beforeSend: function () {
+							$('#dt_outwards').DataTable ().clear ().draw ();
+							$('#dt_outwards').DataTable ().row.add ([
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+                                "<i class='fa fa-spinner fa-spin'></i>"
+							]).draw (false);
+						},
+						data: data,
+            			url: 'assets/php/filter-outwards.php',
+            			success: function (result) {
+            				var result_object = JSON.parse (result);
+            				if (typeof result_object.error === 'undefined') {
+            					console.log (result_object);
+								$('#dt_outwards').DataTable ().clear ().draw ();
+            					for (var i = 0; i < result_object.count; i++) {
+            						var outward = result_object.outwards[i];
+									var markup = "<table class='table mb-0 table-bordered'><tbody><tr><th scope='row'>Name: </th><td>"+outward.item+"</td></tr><tr><th scope='row'> Type: </th><td>"+outward.item_type+"</td></tr><tr><th scope='row'> Manufacturer: </th><td>"+outward.item_manufacturer+"</td></tr></tbody></table>";
+									
+									var markup2 = "<table class='table mb-0 table-bordered'><tbody>";
+									for (var j = 0; j < outward.serial_numbers_count; j++) {
+										markup2 += "<tr><td> "+outward.serial_numbers[j]+" </td></tr>";
+									}
+									markup2 += "</tbody></table>";
+									
+									var markup3 = "<table class='table mb-0 table-bordered'><tbody><tr><th scope='row'>Mode of Dispatch: </th><td>"+outward.mode_of_dispatch+"</td></tr><tr><th scope='row'> Remarks: </th><td>"+outward.remarks+"</td></tr></tbody></table>";
+									
+									$('#dt_outwards').DataTable ().row.add ([
+										outward.outward_id,
+										outward.date,
+										outward.station,
+										markup,
+										outward.quantity,
+										markup2,
+										'<table class="table mb-0 table-bordered"><tbody><tr><th scope="row">Working: </th><td>'+(outward.quantity-outward.pw-outward.nw)+'</td></tr><tr><th scope="row"> Partial Working: </th><td>'+outward.pw+'</td></tr><tr><th scope="row"> Not Working: </th><td>'+outward.nw+'</td></tr></tbody></table>',
+                                        '<table class="table mb-0 table-bordered"><tbody><tr><th scope="row">Remarks: </th><td>'+outward.outward_id+'</td></tr><tr><th scope="row"> Action Taken: </th><td>'+outward.action_taken+'</td></tr></tbody></table>',
+									]).draw (false);
+									$('#dt_outwards').DataTable ().order ([0, 'desc']).draw ();
+            					}
+            				} else {
+            					$("#callout_block_datatable").fadeIn (1000, function () {
+            						$("#callout_block_datatable").html ('<div class="callout callout-danger"><h4>Failed!</h4><p>' + result_object.error + '</p></div>');
+            					});
+            				}
+            			}
+					});
+            	}
+				
+				function read_outwards () {
+            		$.ajax ({
+            			type: 'POST',
+						beforeSend: function () {
+							$('#dt_outwards').DataTable ().row.add ([
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+								"<i class='fa fa-spinner fa-spin'></i>",
+                                "<i class='fa fa-spinner fa-spin'></i>"
+							]).draw (false);
+						},
+                        data:{mode: 1},
+            			url: 'assets/php/read-outwards.php',
+            			success: function (result) {
+            				var result_object = JSON.parse (result);
+            				if (typeof result_object.error === 'undefined') {
+            					console.log (result_object);
+								$('#dt_outwards').DataTable ().clear ().draw ();
+            					for (var i = 0; i < result_object.count; i++) {
+            						var outward = result_object.outwards[i];
+									var markup = "<table class='table mb-0 table-bordered'><tbody><tr><th scope='row'>Name: </th><td>"+outward.item+"</td></tr><tr><th scope='row'> Type: </th><td>"+outward.item_type+"</td></tr><tr><th scope='row'> Manufacturer: </th><td>"+outward.item_manufacturer+"</td></tr></tbody></table>";
+									
+									var markup2 = "<table class='table mb-0 table-bordered'><tbody>";
+									for (var j = 0; j < outward.serial_numbers_count; j++) {
+										markup2 += "<tr><td> "+outward.serial_numbers[j].serial_number+" </td></tr>";
+									}
+									markup2 += "</tbody></table>";
+									
+									var markup3 = "<table class='table mb-0 table-bordered'><tbody><tr><th scope='row'>Mode of Dispatch: </th><td>"+outward.mode_of_dispatch+"</td></tr><tr><th scope='row'> Remarks: </th><td>"+outward.remarks+"</td></tr></tbody></table>";
+									
+									$('#dt_outwards').DataTable ().row.add ([
+										outward.outward_id,
+										outward.date,
+										outward.station,
+										markup,
+										outward.quantity,
+										markup2,
+										'<table class="table mb-0 table-bordered"><tbody><tr><th scope="row">Working: </th><td>'+(outward.quantity-outward.pw-outward.nw)+'</td></tr><tr><th scope="row"> Partial Working: </th><td>'+outward.pw+'</td></tr><tr><th scope="row"> Not Working: </th><td>'+outward.nw+'</td></tr></tbody></table>',
+                                        '<table class="table mb-0 table-bordered"><tbody><tr><th scope="row">Remarks: </th><td>'+outward.outward_id+'</td></tr><tr><th scope="row"> Action Taken: </th><td>'+outward.action_taken+'</td></tr></tbody></table>',
+									]).draw (false);
+									$('#dt_outwards').DataTable ().order ([0, 'desc']).draw ();
+            					}
+            				} else {
+            					$("#callout_block_datatable").fadeIn (1000, function () {
+            						$("#callout_block_datatable").html ('<div class="callout callout-danger"><h4>Failed!</h4><p>' + result_object.error + '</p></div>');
+            					});
+            				}
+            			}
+            		});
+            	}
+				
+				function read_items () {
+					$.ajax ({
+						type: 'POST',
+						url: 'assets/php/read-items.php',
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							console.log (result_object);
+							$("#s2_item").append (new Option ("All", "0"));
+							for (var i = 0; i < result_object.count; i++) {
+								var new_item = new Option (result_object.items[i].name, result_object.items[i].item_id);
+								$('#s2_item').append (new_item);
+							}
+						}
+					});
+				}
+				
+				function read_item_details (item_id, item_type_id = 0, item_manufacturer_id = 0) {
+					$('#s2_item_type').empty ();
+					$("#s2_item_type").append (new Option ("", "", true, true));
+					$('#s2_item_manufacturer').empty ();
+					$("#s2_item_manufacturer").append (new Option ("", "", true, true));
+					$.ajax ({
+						type: 'POST',
+						url: 'assets/php/read-item-types.php',
+						data:{item_id: item_id},
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							console.log (result_object);
+							for (var i = 0; i < result_object.count; i++) {
+								var new_item_type = new Option (result_object.types[i].type, result_object.types[i].type_id);
+								$('#s2_item_type').append (new_item_type);
+							}
+							$("#s2_item_type").val (item_type_id).trigger ("change");
+						}
+					});
+					$.ajax ({
+						type: 'POST',
+						url: 'assets/php/read-item-manufacturers.php',
+						data:{item_id: item_id},
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							console.log (result_object);
+							for (var i = 0; i < result_object.count; i++) {
+								var new_item_manufacturer = new Option (result_object.manufacturers[i].manufacturer, result_object.manufacturers[i].manufacturer_id);
+								$('#s2_item_manufacturer').append (new_item_manufacturer);
+							}
+							$("#s2_item_manufacturer").val (item_manufacturer_id).trigger ("change");
+						}
+					});
+				}
+				
+				function read_stations () {
+					$.ajax ({
+						type: 'POST',
+						url: 'assets/php/read-stations.php',
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							console.log (result_object);
+							$("#s2_station").append (new Option ("All", "0"));
+							for (var i = 0; i < result_object.count; i++) {
+								var new_station = new Option (result_object.stations[i].name, result_object.stations[i].station_id);
+								$("#s2_station").append (new_station);
+							}
+						}
+					});
+				}
+				$(document).on ("click", "#a_logout", function (e) {
+					$.ajax ({
+						url: 'assets/php/session-user-id-unset.php',
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							window.location.href = result_object.target;
+						}
+					});
+				});
+			});
+		</script>
+    </body>
+</html>

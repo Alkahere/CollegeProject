@@ -1,0 +1,173 @@
+body{
+    border:5px black solid; margin:0 auto;
+ 
+}
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+nav{
+    height: 100vh;
+    width: 70vw;
+    min-width: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: auto;
+ }
+ 
+a{
+     position:relative;
+     text-decoration:none;
+     font-family: 'Poppins',sans-serif;
+     color:#a0a0a0;
+     font-size: 18px;
+     letter-spacing: 0.5px;
+     padding:0 10px;
+}
+a:after{
+    content: "";
+    position: absolute;
+    background-color: #ff3c78;
+    height: 3px;
+    width: 0;
+    left: 0;
+    bottom: -10px;
+    transition: 0.3s;
+}
+a:hover{
+    color: #ffff;
+}
+a:hover:after{
+    width: 100% ;
+}
+.titlle { color:#021F41; position: relative; top:20px; font-size: 30px}
+
+.box-1{
+    color:white;
+    text-align:center;
+    background-color:lightgrey;
+}
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+ }
+#navbar {
+    margin-left:0px;
+    margin-right:0px;
+    background-color:#fff;
+    color:#020247;
+}
+#navbar ul{
+    padding-top: 10px;
+    list-style:none;
+}
+#navbar li{
+    display:inline;
+    padding:15px
+}
+#navbar li.active{
+    display:inline;
+    background: #020247; color:#fff!important
+} #navbar li.active a{
+    display:inline;
+ color:#fff!important
+}
+#navbar a{
+    color:#000;
+    /*text-decoration:none;*/
+    font-size:18px;
+   
+}
+.vision-block {
+    background: #F1F1F1;
+    border-radius: 10px;
+    float: left;
+    padding: 20px 15px;
+    width: 100%;
+    margin: 35px 0 0; text-align: center
+}
+.vision-block>figure {
+    float: left;
+    height: 205x;
+    text-align: center;
+    width: 100%;
+}
+.vision-block figcaption {
+    float: left;
+    width: 100%;
+}
+
+vision-block figcaption h3 {
+    color: #fff;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.vision-content .vision-block p {
+    color: #fff;
+    float: left;
+    font-family: proxima_novaregular;
+    font-size: 16px;
+    line-height: 26px;
+    width: 100%;
+}
+.container{
+    
+    background-position: center;
+   
+}
+.box-1{
+   
+    color:black;
+    background-size:100px 100px;
+    background-position: left;
+    /*margin-left:25px;
+    margin-right:25px;*/
+   /*text-decoration: underline;*/
+}
+.white-bg {background:#fff; overflow: hidden}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.box-2 {background: #fff; overflow: hidden;}
+.box-3{
+    
+    border:5px black dotted;
+    padding:20px;
+    padding-top:10px;
+    margin-left:155px;
+    margin-right: 155px;
+    display:block;
+}
+.box-3 h2{
+    text-align: center;
+    
+}
+.blue-bg{background: #3065CB}
+.box-1 h1 { margin:0 auto; }
+.my-form{
+    position:left top;
+    margin-left:100px;
+    margin-bottom:100px;
+    
+}
+#main-footer{
+    background:#333;
+    color:#fff;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+.head{
+    margin-bottom:20px
+}

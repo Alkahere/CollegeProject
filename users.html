@@ -1,0 +1,410 @@
+<?php 
+    session_start();
+    if ($_SESSION['session_user_type']==="Inward" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer") {
+        $host = $_SERVER['HTTP_HOST'];
+        $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+        $extra = 'dashboard.html';
+        header("Location: http://$host$uri/$extra");
+        exit; 
+    }
+?>
+<!DOCTYPE html>
+<!--
+    This is a starter template page. Use this page to start your new project from
+    scratch. This page gets rid of all links and provides the needed markup only.
+    -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Users | IMD Aviation Inventory</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="assets/bower_components/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="assets/bower_components/Ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+		<!-- Select2 -->
+  		<link rel="stylesheet" href="assets/bower_components/select2/dist/css/select2.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="assets/css/AdminLTE.min.css">
+        <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+            page. However, you can choose any other skin. Make sure you
+            apply the skin class to the body tag so the changes take effect. -->
+        <link rel="stylesheet" href="assets/css/skins/skin-blue.min.css">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <!-- Google Font -->
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		<style>
+			.select2-container { 
+				width: 100% !important; 
+			}
+			.table.mb-0 {
+				margin-bottom: 0 !important;
+			}
+			.table.mb-8 {
+				margin-bottom: 8px !important;
+			}
+			.table-minimal {
+				margin: 0;
+				width: 100%;
+			}
+			.table-minimal.mb-8 {
+				margin-bottom: 8px;
+			}
+			.table-minimal tbody tr td {
+				padding-bottom: 8px;
+				padding-right: 8px;
+			}			
+			.table-minimal tbody tr td:last-child {
+				padding-right: 0;
+			}			
+			.table-minimal tbody tr:last-child td {
+				padding-bottom: 0;
+			}
+			a.danger {
+				text-decoration: none;
+				color: rgb(215, 57, 37);
+			}
+			a.primary {
+				text-decoration: none;
+				color: rgb(54, 127, 169);
+			}
+			.form-control.w-50 {
+				width: 50px !important;
+			}
+		</style>
+    </head>
+    <!--
+        BODY TAG OPTIONS:
+        =================
+        Apply one or more of the following classes to get the
+        desired effect
+        |---------------------------------------------------------|
+        | SKINS         | skin-blue                               |
+        |               | skin-black                              |
+        |               | skin-purple                             |
+        |               | skin-yellow                             |
+        |               | skin-red                                |
+        |               | skin-green                              |
+        |---------------------------------------------------------|
+        |LAYOUT OPTIONS | fixed                                   |
+        |               | layout-boxed                            |
+        |               | layout-top-nav                          |
+        |               | sidebar-collapse                        |
+        |               | sidebar-mini                            |
+        |---------------------------------------------------------|
+        -->
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+            <!-- Main Header -->
+            <header class="main-header">
+                <a href="index.html" class="logo">
+                <span class="logo-mini"><img src="assets/img/imd-logo.png" class="float-left" ></span>
+                <span class="logo-lg"><img src="assets/img/imd-logo.png" class="float-left"></span>
+                </a>
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    </a>
+					<div class="navbar-custom-menu">
+						<ul class="nav navbar-nav">
+							<li>
+								<a href="javascript:void(0);" id="a_logout">Logout</a>
+							</li>
+						</ul>
+					</div>
+                </nav>
+            </header>
+            <!-- Left side column. contains the logo and sidebar -->
+                        <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar">
+                <!-- sidebar: style can be found in sidebar.less -->
+                <section class="sidebar">
+                    <!-- Sidebar Menu -->
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="header">MENU</li>
+                        <!-- Optionally, you can add icons to the links -->
+                        <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                        <?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+                        <li><a href="stations.html"><i class="fa fa-plane"></i> <span>Stations</span></a></li>
+                        <?php } ?>
+                        <?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+                        <li><a href="items.html"><i class="fa fa-shopping-cart"></i> <span>Items</span></a></li>
+                        <?php } ?>
+						<?php if($_SESSION['session_user_type']==="Administrator"){ ?>
+                        <li class="active"><a href="users.html"><i class="fa fa-users"></i> <span>Users</span></a></li>
+                        <?php } ?>
+                        <?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Inward"){ ?>
+                        <li><a href="inwards.html"><i class="fa fa-arrow-circle-down"></i> <span>Inwards</span></a></li>
+                        <?php } ?>
+                        <?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward"){ ?>
+                        <li><a href="outwards.html"><i class="fa fa-arrow-circle-up"></i> <span>Outwards</span></a></li>
+                        <?php } ?>
+						<?php if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward"){ ?>
+                        <li><a href="status.html"><i class="fa fa-flag"></i> <span>Status</span></a></li>
+                        <?php } ?>
+                        <li class="treeview">
+                            <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>Reports</span>
+                            <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Inward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+                                <li><a href="inward-report.html"><i class="fa fa-circle-o"></i> Inwards</a></li>
+                                <?php } ?>
+                                <?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+                                <li><a href="outward-report.html"><i class="fa fa-circle-o"></i> Outwards</a></li>
+                                <?php } ?>
+                                <?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Viewer"){ ?>
+                                <li><a href="stock-report.html"><i class="fa fa-circle-o"></i> Stock</a></li>
+								<?php } ?>
+								<?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+								<li><a href="dispatch-report.html"><i class="fa fa-circle-o"></i> Dispatch</a></li>
+								<?php } ?>
+								<?php
+                                    if($_SESSION['session_user_type']==="Administrator" || $_SESSION['session_user_type']==="Outward" || $_SESSION['session_user_type']==="Viewer"){ ?>
+								<li><a href="status-report.html"><i class="fa fa-circle-o"></i> Status</a></li>
+								<?php } ?>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- /.sidebar-menu -->
+                </section>
+                <!-- /.sidebar -->
+            </aside><!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Users
+                        <small>Create, Read, Update and Delete</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="dashboard.html"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                        <li class="active">Users</li>
+                    </ol>
+                </section>
+                <!-- Main content -->
+                <section class="content container-fluid">
+                    <div id="dv_form" class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Form</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form role="form" id="fm_user" method="post" action="">
+                            <div class="box-body">
+								<div id="callout_block_form" class="col-md-12"></div>
+								<div class="col-md-12">
+									<table class='table mb-0 table-bordered'>
+										<thead>
+											<tr>
+												<th scope="col">First Name</th>
+												<th scope="col">Last Name</th>
+                                                <th scope="col">Username</th>
+												<th scope="col">Password</th>
+												<th scope="col">Retype Password</th>
+												<th scope="col">Role</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td class="td-group">
+													<input type="text" class="form-control" placeholder="Enter First Name" name="tx_first_name">
+												</td>
+												<td class="td-group">
+													<input type="text" class="form-control" placeholder="Enter Last Name" name="tx_last_name">
+												</td>
+												<td class="td-group">
+													<input type="text" class="form-control" placeholder="Enter Username" name="tx_username">
+												</td>
+												<td class="td-group">
+													<input id="tx_password" type="password" class="form-control" placeholder="Enter Password" name="tx_password">
+												</td>
+												<td class="td-group">
+													<input type="password" class="form-control" placeholder="Retype Password" name="tx_retype_password">
+												</td>
+												<td class="td-group">
+													<div class="select2-group">
+														<select class="form-control select2" id="s2_roles" name="tx_role">
+															<option value=""></option>
+															<option value="Administrator">Administrator</option>
+															<option value="Inward">Inward</option>
+															<option value="Outward">Outward</option>
+															<option value="Viewer">Viewer</option>
+														</select>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+								<input type="hidden" name="station_id" value=""/>
+                                <button type="submit" class="pull-right btn btn-primary" id="bt_save">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box -->
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+            <!-- Main Footer -->
+            <footer class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">
+                    <b>Version</b> 1.0
+                </div>
+                <!-- Default to the left -->
+				<strong>Copyright &copy; <script>document.writeln (new Date ().getFullYear ());</script> <a href="index.html">IMD, Pune</a>.</strong> All rights reserved.
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+        <!-- REQUIRED JS SCRIPTS -->
+        <!-- jQuery 3 -->
+        <script src="assets/bower_components/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<!-- Select2 -->
+		<script src="assets/bower_components/select2/dist/js/select2.full.min.js"></script>
+        <!-- DataTables -->
+        <script src="assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <!-- SlimScroll -->
+        <script src="assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="assets/bower_components/fastclick/lib/fastclick.js"></script>
+        <!-- AdminLTE App -->
+        <script src="assets/js/adminlte.min.js"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="assets/js/demo.js"></script>
+        <!-- jQuery Validate 1.16.0 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/additional-methods.min.js"></script>
+        <!-- page script -->
+        <script>
+            $('document').ready (function () {
+				$.ajax ({
+            		type: 'POST',
+            		url: 'assets/php/session-user-id.php',
+            		success: function (result) {
+            			var result_object = JSON.parse (result);
+            			if (result_object.target === 'login.html')
+            				window.location.href = result_object.target;
+            		}
+            	});
+            	$('#s2_roles').select2 ({
+					placeholder: 'Select Role'
+				});
+            	$('#fm_user').validate ({
+            		highlight: function (element) {
+            			$(element).closest('.td-group').addClass('has-error');
+            		},
+            		unhighlight: function (element) {
+            			$(element).closest('.td-group').removeClass('has-error');
+            		},
+            		errorElement: 'span',
+            		errorClass: 'help-block',
+            		errorPlacement: function (error, element) {
+            			if (element.parent('.select2-group').length) {
+            				error.insertAfter(element.parent());
+            			} else {
+            				error.insertAfter(element);
+            			}
+            		},
+            		rules: {
+            			tx_first_name: {
+            				required: true
+            			},
+						tx_last_name: {
+            				required: true
+            			},
+						tx_username: {
+            				required: true
+            			},
+						tx_password: {
+            				required: true,
+							minlength: 8
+            			},
+						tx_retype_password: {
+            				required: true,
+							equalTo: "#tx_password"
+            			},
+						tx_role: {
+							required: true
+						}
+            		},
+            		submitHandler: submit_form
+            	});
+				
+            	function submit_form () {
+					create_user ();            		 
+            	}			
+				
+				function create_user () {
+					var data = $('#fm_user').serialize ();
+					$.ajax ({
+						type: 'POST',
+						url: 'assets/php/create-user.php',
+						data: data,
+						beforeSend: function () {
+							$('#bt_save').prop ("disabled", true);
+							$('#bt_save').html ("<i class='fa fa-spinner fa-spin'></i> Processing...");
+							$("#callout_block_form").fadeOut (1000, function () {
+								$("#callout_block_form").html ("");
+							});
+						},
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							if (typeof result_object.success !== 'undefined') {
+								$("#callout_block_form").fadeIn (1000, function () {
+									$("#callout_block_form").html ('<div class="callout callout-success"><h4>Success!</h4><p>' + result_object.success + '</p></div>');
+									$('#bt_save').prop ("disabled", false);
+									$('#bt_save').html ("Save");
+								});
+							} else {
+								$("#callout_block_form").fadeIn (1000, function () {
+									$("#callout_block_form").html ('<div class="callout callout-danger"><h4>Failed!</h4><p>' + result_object.error + '</p></div>');
+									$('#bt_save').prop ("disabled", false);
+									$('#bt_save').html ("Save");
+								});
+							}
+						}
+					});
+				}
+				
+				$(document).on ("click", "#a_logout", function (e) {
+					$.ajax ({
+						url: 'assets/php/session-user-id-unset.php',
+						success: function (result) {
+							var result_object = JSON.parse (result);
+							window.location.href = result_object.target;
+						}
+					});
+				});
+			});
+        </script>
+    </body>
+</html>
